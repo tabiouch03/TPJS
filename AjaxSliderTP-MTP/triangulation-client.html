@@ -1,0 +1,38 @@
+<html>
+<head>
+<script>
+
+var mydata = [300,200] ;
+
+function sendData(axis,myval) {
+    // just verify slider value
+    console.log(axis,myval);
+    // modify array value
+    if (axis == "X") { mydata[0] = parseInt(myval) ;}
+    else if (axis == "Y") { mydata[1]= parseInt(myval) ; } // casted as string
+    // check the final array / values
+    console.log(mydata);
+
+    // now send ajax 
+    var xmlhttp = new XMLHttpRequest();
+    xmlhttp.open("GET", "stock.php?x="+mydata[0]+"&y="+mydata[1], true);
+    // xmlhttp.open("GET", "autocomplete.php?q=" + str, true);
+    xmlhttp.send();
+    //reception de la requete
+    xmlhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            document.getElementById("txtHint").innerHTML = this.responseText;
+        }
+    };
+}
+
+</script>
+</head>
+<body onload="sendData('x',300);sendData('y',200)">
+
+<input id="Xaxis" type="range" min="1" max="600" value="300" onChange="sendData('X',this.value)">
+<input id="Yaxis" type="range" min="1" max="400" value="200" onChange="sendData('Y',this.value)">
+<br/>
+<span id="txtHint"></span>
+</body>
+</html>

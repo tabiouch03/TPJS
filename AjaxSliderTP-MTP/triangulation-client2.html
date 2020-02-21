@@ -1,0 +1,58 @@
+<html>
+<head>
+    <style>
+        #moveSquare {background-color:brown;width:100px;height:100px;}
+    </style>
+
+</head>
+<body onLoad="receiveData();">
+
+<span id="txtHint"></span>
+<div id="moveSquare"></div>
+
+<script>
+
+mydata = [0,0];
+
+    // launched by receiveData
+    function sendAjax() {
+    // now send ajax 
+    var xmlhttp = new XMLHttpRequest();
+    xmlhttp.open("GET", "recall.php", true);
+    // xmlhttp.open("GET", "autocomplete.php?q=" + str, true);
+    xmlhttp.send();
+    //reception de la requete
+    xmlhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            myrep = this.responseText.split('/');
+            mydata[0] = myrep[0] ;
+            mydata[1] = myrep[1] ;
+        }
+    };
+}
+
+    function receiveData() {    
+    // inits 
+
+    SQ = document.getElementById("moveSquare") ;
+
+    // launch a looping call 
+
+        setInterval(drawSQ, 500);
+    
+        function drawSQ(){  
+            sendAjax(); // first call to current data
+
+            // then move square 
+            SQ.style.position = "absolute";
+            SQ.style.left = mydata[0]+'px';
+            SQ.style.top = mydata[1]+'px';
+            console.log(mydata);
+        }
+    
+    }
+    
+    </script>
+
+</body>
+</html>
